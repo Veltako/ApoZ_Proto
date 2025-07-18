@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "ApoZLocomotion",
+	"Description": "input, sprint, strafe, crouch, etc",
+	"Category": "Other",
+	"CreatedBy": "Veltako",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "ApoZLocomotion",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
