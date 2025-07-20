@@ -5,10 +5,12 @@
 #include "InputActionValue.h"
 #include "ApoZCharacter.generated.h"
 
+// Forward declarations pour les composants utilisés
 class UCameraComponent;
 class USpringArmComponent;
 class UInputMappingContext;
 class UInputAction;
+class ULocomotionComponent;
 
 UCLASS()
 class APOZ_API AApoZCharacter : public ACharacter
@@ -24,19 +26,16 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	/** Réplication des propriétés */
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	/** Caméra à la première personne */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
-	UCameraComponent* FPSCameraComponent;
-
-	/** SpringArm (utile si tu veux TPP plus tard, ici longueur à zéro pour TrueFPS) */
+	// === Camera ===
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 	USpringArmComponent* SpringArm;
 
-	/** INPUTS ENHANCED INPUT **/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
+	UCameraComponent* FPSCameraComponent;
+
+	// === Enhanced Input ===
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
 	UInputMappingContext* PlayerMappingContext;
 
@@ -49,7 +48,16 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
 	UInputAction* JumpAction;
 
-	/** Fonctions de déplacement */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+	UInputAction* SprintAction;
+
+	// === Composants systèmes (ex: plugin Locomotion) ===
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	ULocomotionComponent* LocomotionComponent;
+
+	// === Fonctions appelées par Enhanced Input ===
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	void SprintStart(const FInputActionValue& Value);
+	void SprintStop(const FInputActionValue& Value);
 };
