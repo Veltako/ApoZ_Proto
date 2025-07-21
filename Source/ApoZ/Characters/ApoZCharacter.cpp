@@ -76,6 +76,13 @@ void AApoZCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 			Input->BindAction(SprintAction, ETriggerEvent::Started, this, &AApoZCharacter::SprintStart);
 			Input->BindAction(SprintAction, ETriggerEvent::Completed, this, &AApoZCharacter::SprintStop);
 		}
+
+		// Crouch (plugin Locomotion)
+		if (CrouchAction)
+		{
+			Input->BindAction(CrouchAction, ETriggerEvent::Started, this, &AApoZCharacter::CrouchStart);
+			Input->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AApoZCharacter::CrouchStop);
+		}
 	}
 }
 
@@ -103,8 +110,10 @@ void AApoZCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+// Sprint
 void AApoZCharacter::SprintStart(const FInputActionValue& Value)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Appel SprintStart depuis le perso !"));
 	if (LocomotionComponent)
 	{
 		LocomotionComponent->StartSprinting();
@@ -115,6 +124,22 @@ void AApoZCharacter::SprintStop(const FInputActionValue& Value)
 	if (LocomotionComponent)
 	{
 		LocomotionComponent->StopSprinting();
+	}
+}
+
+// Crouch
+void AApoZCharacter::CrouchStart(const FInputActionValue& Value)
+{
+	if (LocomotionComponent)
+	{
+		LocomotionComponent->StartCrouching();
+	}
+}
+void AApoZCharacter::CrouchStop(const FInputActionValue& Value)
+{
+	if (LocomotionComponent)
+	{
+		LocomotionComponent->StopCrouching();
 	}
 }
 

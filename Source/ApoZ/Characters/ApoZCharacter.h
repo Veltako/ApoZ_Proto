@@ -51,6 +51,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
 	UInputAction* SprintAction;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+	UInputAction* CrouchAction;
+
 	// === Composants systèmes (ex: plugin Locomotion) ===
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	ULocomotionComponent* LocomotionComponent;
@@ -60,4 +63,6 @@ public:
 	void Look(const FInputActionValue& Value);
 	void SprintStart(const FInputActionValue& Value);
 	void SprintStop(const FInputActionValue& Value);
+	void CrouchStart(const FInputActionValue& Value);
+	void CrouchStop(const FInputActionValue& Value);
 };

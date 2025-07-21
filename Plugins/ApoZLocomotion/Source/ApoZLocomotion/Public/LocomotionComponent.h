@@ -13,6 +13,7 @@ class APOZLOCOMOTION_API ULocomotionComponent : public UActorComponent
 public:
     ULocomotionComponent();
 
+    // Etat du sprint (répliqué)
     UPROPERTY(Replicated, BlueprintReadOnly, Category = "Locomotion")
     bool bIsSprinting = false;
 
@@ -21,6 +22,16 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "Locomotion")
     void StopSprinting();
+
+    // Etat du crouch (répliqué)
+    UPROPERTY(Replicated, BlueprintReadOnly, Category = "Locomotion")
+    bool bIsCrouching = false;
+
+    UFUNCTION(BlueprintCallable, Category = "Locomotion")
+    void StartCrouching();
+
+    UFUNCTION(BlueprintCallable, Category = "Locomotion")
+    void StopCrouching();
 
 protected:
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
