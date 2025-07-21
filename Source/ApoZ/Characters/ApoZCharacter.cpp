@@ -130,6 +130,7 @@ void AApoZCharacter::SprintStop(const FInputActionValue& Value)
 // Crouch
 void AApoZCharacter::CrouchStart(const FInputActionValue& Value)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Appel CrouchStart depuis le perso !"));
 	if (LocomotionComponent)
 	{
 		LocomotionComponent->StartCrouching();

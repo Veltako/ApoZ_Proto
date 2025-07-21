@@ -2,10 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Net/UnrealNetwork.h" // Pour la réplication
+#include "Net/UnrealNetwork.h"
 #include "LocomotionComponent.generated.h"
 
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class APOZLOCOMOTION_API ULocomotionComponent : public UActorComponent
 {
     GENERATED_BODY()
@@ -13,37 +13,36 @@ class APOZLOCOMOTION_API ULocomotionComponent : public UActorComponent
 public:
     ULocomotionComponent();
 
-    // === SPRINt ===
-    UPROPERTY(Replicated, BlueprintReadOnly, Category="Locomotion")
+    // Réplication
+    UPROPERTY(ReplicatedUsing = OnRep_Sprinting)
     bool bIsSprinting = false;
 
-    UFUNCTION(BlueprintCallable, Category="Locomotion")
-    void StartSprinting();
+    UPROPERTY(ReplicatedUsing = OnRep_Crouching)
+    bool bIsCrouching = false;
 
-    UFUNCTION(BlueprintCallable, Category="Locomotion")
+    // Sprint
+    UFUNCTION(BlueprintCallable, Category = "Locomotion")
+    void StartSprinting();
+    UFUNCTION(BlueprintCallable, Category = "Locomotion")
     void StopSprinting();
 
     UFUNCTION(Server, Reliable)
-    void Server_StartSprinting();
+    void Server_SetSprinting(bool bSprint);
 
-    UFUNCTION(Server, Reliable)
-    void Server_StopSprinting();
+    UFUNCTION()
+    void OnRep_Sprinting();
 
-    // === CROUCH ===
-    UPROPERTY(Replicated, BlueprintReadOnly, Category="Locomotion")
-    bool bIsCrouching = false;
-
-    UFUNCTION(BlueprintCallable, Category="Locomotion")
+    // Crouch
+    UFUNCTION(BlueprintCallable, Category = "Locomotion")
     void StartCrouching();
-
-    UFUNCTION(BlueprintCallable, Category="Locomotion")
+    UFUNCTION(BlueprintCallable, Category = "Locomotion")
     void StopCrouching();
 
     UFUNCTION(Server, Reliable)
-    void Server_StartCrouching();
+    void Server_SetCrouching(bool bCrouch);
 
-    UFUNCTION(Server, Reliable)
-    void Server_StopCrouching();
+    UFUNCTION()
+    void OnRep_Crouching();
 
 protected:
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
