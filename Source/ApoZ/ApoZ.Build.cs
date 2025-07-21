@@ -8,7 +8,7 @@ public class ApoZ : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "NetCore", "ApoZLocomotion" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "NetCore", "ApoZLocomotion", "ApoZInventory" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
