@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "InventoryComponent.h"
 #include "ApoZCharacter.generated.h"
 
 // Forward declarations pour les composants utilisés
@@ -54,9 +55,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
 	UInputAction* CrouchAction;
 
-	// === Composants systèmes (ex: plugin Locomotion) ===
+	// === Composants systèmes (ex: plugin Locomotion, Inventory, etc) ===
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	ULocomotionComponent* LocomotionComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UInventoryComponent* InventoryComponent;
 
 	// === Fonctions appelées par Enhanced Input ===
 	void Move(const FInputActionValue& Value);

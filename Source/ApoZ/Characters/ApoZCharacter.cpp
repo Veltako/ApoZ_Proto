@@ -28,6 +28,9 @@ AApoZCharacter::AApoZCharacter()
 
 	// Ajout du composant plugin Locomotion
 	LocomotionComponent = CreateDefaultSubobject<ULocomotionComponent>(TEXT("LocomotionComponent"));
+
+	// Ajout du composant plugin Inventory
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 }
 
 void AApoZCharacter::BeginPlay()
@@ -45,6 +48,24 @@ void AApoZCharacter::BeginPlay()
 			}
 		}
 	}
+
+	// Test de l'inventaire à supp
+	if (InventoryComponent)
+	{
+		FInventoryItem Potion(FName(TEXT("Potion")), 2);
+		InventoryComponent->AddItem(Potion);
+
+		// Affiche tout l'inventaire dans le log
+		for (const FInventoryItem& Item : InventoryComponent->Items)
+		{
+			if (APlayerController* PC = Cast<APlayerController>(GetController()))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("INVENTORY for %s: %s x%d"),
+					*GetName(), *Item.ItemID.ToString(), Item.Quantity);
+			}
+		}
+	}
+
 }
 
 void AApoZCharacter::Tick(float DeltaTime)
@@ -143,6 +164,7 @@ void AApoZCharacter::CrouchStop(const FInputActionValue& Value)
 		LocomotionComponent->StopCrouching();
 	}
 }
+
 
 void AApoZCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
