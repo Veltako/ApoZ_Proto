@@ -18,6 +18,7 @@ void ULocomotionComponent::StartSprinting()
         return;
     }
 
+
     bIsSprinting = true;
     if (ACharacter* OwnerChar = Cast<ACharacter>(GetOwner()))
     {
