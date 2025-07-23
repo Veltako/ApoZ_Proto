@@ -6,6 +6,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
 #include "InputAction.h"
+#include "../UI/HUD/WBP_Inventory.h"
 #include "LocomotionComponent.h"
 
 AApoZCharacter::AApoZCharacter()
@@ -31,13 +32,14 @@ AApoZCharacter::AApoZCharacter()
 
 	// Ajout du composant plugin Inventory
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
+	InventoryWidget = nullptr;
 }
 
 void AApoZCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Ajoute le MappingContext EnhancedInput
+	// Donne le mapping des touches au joueurs
 	if (APlayerController* PC = Cast<APlayerController>(GetController()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
@@ -65,7 +67,6 @@ void AApoZCharacter::BeginPlay()
 			}
 		}
 	}
-
 }
 
 void AApoZCharacter::Tick(float DeltaTime)
@@ -103,6 +104,11 @@ void AApoZCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		{
 			Input->BindAction(CrouchAction, ETriggerEvent::Started, this, &AApoZCharacter::CrouchStart);
 			Input->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AApoZCharacter::CrouchStop);
+		}
+
+		if (ToggleInventoryAction)
+		{
+			Input->BindAction(ToggleInventoryAction, ETriggerEvent::Started, this, &AApoZCharacter::ToggleInventory);
 		}
 	}
 }
@@ -164,6 +170,29 @@ void AApoZCharacter::CrouchStop(const FInputActionValue& Value)
 		LocomotionComponent->StopCrouching();
 	}
 }
+
+// Inventory
+void AApoZCharacter::ToggleInventory()
+{
+	if (InventoryWidget && InventoryWidget->IsInViewport())
+	{
+		InventoryWidget->RemoveFromParent();
+		InventoryWidget = nullptr;
+		return;
+	}
+	if (InventoryWidgetClass)
+	{
+		InventoryWidget = CreateWidget<UUserWidget>(GetWorld(), InventoryWidgetClass);
+
+		// Le cast permet d'accéder à la variable InventoryComponent exposée dans le BP widget (WBP_Inventory)
+		if (UWBP_Inventory* InvWidget = Cast<UWBP_Inventory>(InventoryWidget))
+		{
+			InvWidget->InventoryComponent = InventoryComponent;
+		}
+		InventoryWidget->AddToViewport();
+	}
+}
+
 
 
 void AApoZCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
