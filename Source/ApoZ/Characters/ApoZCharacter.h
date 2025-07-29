@@ -3,9 +3,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
-#include "InventoryComponent.h"
-#include "Blueprint/UserWidget.h"
-#include "../UI/HUD/WBP_Inventory.h"
 #include "ApoZCharacter.generated.h"
 
 // Forward declarations pour les composants utilisés
@@ -65,18 +62,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	ULocomotionComponent* LocomotionComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	UInventoryComponent* InventoryComponent;
-
-	// La classe du widget inventaire
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
-	TSubclassOf<UUserWidget> InventoryWidgetClass;
-
-	// L’instance du widget à l’écran
-	UPROPERTY()
-	UUserWidget* InventoryWidget;
-
-
 	// === Fonctions appelées par Enhanced Input ===
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
@@ -84,7 +69,4 @@ public:
 	void SprintStop(const FInputActionValue& Value);
 	void CrouchStart(const FInputActionValue& Value);
 	void CrouchStop(const FInputActionValue& Value);
-
-	// Fonction à binder à la touche
-	void ToggleInventory();
 };
