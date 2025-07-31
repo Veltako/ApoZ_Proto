@@ -6,6 +6,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
 #include "InputAction.h"
+#include "InventoryWidget.h"
 #include "LocomotionComponent.h"
 
 AApoZCharacter::AApoZCharacter()
@@ -25,6 +26,9 @@ AApoZCharacter::AApoZCharacter()
 
 	bUseControllerRotationYaw = true;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
+
+	// Création du composant d'inventaire (sera visible dans l'éditeur si besoin)
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 }
 
 void AApoZCharacter::BeginPlay()
@@ -41,6 +45,24 @@ void AApoZCharacter::BeginPlay()
 				Subsystem->AddMappingContext(PlayerMappingContext, 0);
 			}
 		}
+	}
+
+
+	// Ajoute 2 bandages dans le sac principal au début du jeu (exemple)
+	if (InventoryComponent)
+	{
+		FGridItemInstance NewItem;
+		NewItem.ItemID = FName("Bandage");
+		NewItem.Quantity = 2;
+		// X, Y, Rotated si tu veux les placer précisément (optionnel)
+		InventoryComponent->AddItemToContainer(
+			FName("MainBag"),
+			FName("Bandage"), // ou NewItem.ItemID
+			0,                // X
+			0,                // Y
+			false,            // bRotated
+			2                 // Quantity
+		);
 	}
 }
 
@@ -81,6 +103,11 @@ void AApoZCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 			Input->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AApoZCharacter::CrouchStop);
 		}
 
+		// Toggle inventory (plugin Inventory)
+		if (ToggleInventoryAction)
+		{
+			Input->BindAction(ToggleInventoryAction, ETriggerEvent::Started, this, &AApoZCharacter::ToggleInventory);
+		}
 	}
 }
 
@@ -141,6 +168,27 @@ void AApoZCharacter::CrouchStop(const FInputActionValue& Value)
 		LocomotionComponent->StopCrouching();
 	}
 }
+
+void AApoZCharacter::ToggleInventory(const FInputActionValue& Value)
+{
+	if (InventoryWidget && InventoryWidget->IsInViewport())
+	{
+		InventoryWidget->RemoveFromParent();
+		InventoryWidget = nullptr;
+		return;
+	}
+
+	if (InventoryWidgetClass)
+	{
+		InventoryWidget = CreateWidget<UInventoryWidget>(GetWorld(), InventoryWidgetClass);
+		if (UInventoryWidget* InvWidget = Cast<UInventoryWidget>(InventoryWidget))
+		{
+			InvWidget->InventoryComponent = InventoryComponent;
+			InvWidget->AddToViewport();
+		}
+	}
+}
+
 
 void AApoZCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {

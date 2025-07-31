@@ -2,7 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "InventoryComponent.h"
 #include "InputActionValue.h"
+#include "Blueprint/UserWidget.h"
+#include "InventoryWidget.h"
 #include "ApoZCharacter.generated.h"
 
 // Forward declarations pour les composants utilisés
@@ -62,6 +65,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	ULocomotionComponent* LocomotionComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Inventory")
+	UInventoryComponent* InventoryComponent;
+
+	// === UI HUD Inventaire ===
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UUserWidget> InventoryWidgetClass;
+
+	UUserWidget* InventoryWidget = nullptr;
+
 	// === Fonctions appelées par Enhanced Input ===
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
@@ -69,4 +82,5 @@ public:
 	void SprintStop(const FInputActionValue& Value);
 	void CrouchStart(const FInputActionValue& Value);
 	void CrouchStop(const FInputActionValue& Value);
+	void ToggleInventory(const FInputActionValue& Value);
 };
